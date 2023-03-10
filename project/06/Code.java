@@ -4,7 +4,7 @@ public class Code {
 	
 	public String dest(String dest) {
 		
-		if(dest.equals(null)) return "000";
+		if(dest.equals("null")) return "000";
 		if(dest.equals("M")) return "001";
 		if(dest.equals("D")) return "010";
 		if(dest.equals("MD") | dest.equals("DM")) return "011";
