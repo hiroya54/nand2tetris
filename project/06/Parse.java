@@ -7,8 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class Parse{
-	int currentCommandNum=0;
-	ArrayList<String> instructions = new ArrayList<>();
+	private int currentCommandNum=0;
+	private ArrayList<String> instructions = new ArrayList<>();
 	
 	public Parse(File file) throws IOException{
 		//ファイル整形
@@ -41,21 +41,37 @@ public class Parse{
 	}
 	
 	public boolean hasMoreCommands() throws IOException{
+		
 		if(currentCommandNum < instructions.size()) return true;
 		else return false;
 	}
 	
 	public void advance() throws IOException{
-		currentCommandNum+=1;
 		
+		currentCommandNum+=1;
 	}
 	
 	public String commandType() {
 		String command = instructions.get(currentCommandNum);
+		
 		if(command.charAt(0)=='@') return "A_COMMAND";
 		else if(command.charAt(0)=='(') return "L_COMMAND";
 		else return "C_COMMAND";
 	}
+	
+	public String symbol() {
+		String command = this.instructions.get(this.currentCommandNum);
+		if(this.commandType().equals("A_COMMAND")) {
+			//文頭の@を削除
+			return command.substring(1,command.length());
+		}else if(this.commandType().equals("L_COMMAND")) {
+			//()を削除
+			return command.substring(1,command.length()-1);
+		}else {
+			return "NG";
+		}
+	}
+	
 	public String dest() {
 		String command = this.instructions.get(this.currentCommandNum);
 		int indexOfEqual = command.indexOf("=");
@@ -104,4 +120,23 @@ public class Parse{
 		}
 	
 	}
+	
+	public void reset() {
+		currentCommandNum=0;
+	}
+	
+	public int getCurrentCommandNum() {
+		return currentCommandNum;
+	}
+	public void setCurrentCommandNum(int currentCommandNum) {
+		this.currentCommandNum = currentCommandNum;
+	}
+	public ArrayList<String> getInstructions() {
+		return instructions;
+	}
+	public void setInstructions(ArrayList<String> instructions) {
+		this.instructions = instructions;
+	}
+	
+	
 }

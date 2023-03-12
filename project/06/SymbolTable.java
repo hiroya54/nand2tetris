@@ -6,6 +6,8 @@ import java.util.Map;
 public class SymbolTable {
 	
 	private Map<String,Integer> symbols = new HashMap<>();
+	private int currentValMemory;
+	private int numOfL;
 	
 	public SymbolTable() {
 		symbols.put("SP", 0);
@@ -32,6 +34,8 @@ public class SymbolTable {
 		symbols.put("SCREEN", 16384);
 		symbols.put("KBD", 24576);
 		
+		currentValMemory=16;
+		numOfL=0;
 	}
 	public void addEntry(String symbol,int address) {
 		symbols.put(symbol, address);
@@ -44,5 +48,18 @@ public class SymbolTable {
 	public int getAddress(String symbol) {
 		return symbols.get(symbol);
 	}
+	public int getCurrentValMemory() {
+		return currentValMemory;
+	}
+	public void setCurrentValMemory(int currentValMemory) {
+		this.currentValMemory = currentValMemory;
+	}
+	public int getNumOfL() {
+		return numOfL;
+	}
+	public void setNumOfL(int numOfL) {
+		this.numOfL = numOfL;
+	}
+	
 
 }
