@@ -29,7 +29,8 @@ public class Main {
 			
 			//first step
 			Parse p = new Parse(file);
-			SymbolTable symbols = new SymbolTable();			
+			SymbolTable symbols = new SymbolTable();
+			//Lコマンドを対象にシンボルテーブルを作成
 			while(p.hasMoreCommands()) {
 				//命令文を指定
 				String command = p.getInstructions().get(p.getCurrentCommandNum());
@@ -65,16 +66,13 @@ public class Main {
 						//2進数に変換
 						binary =Integer.toBinaryString(Integer.parseInt(symbol));
 					}else {
-						if(symbols.contains(symbol)) {
-							//2進数に変換
-							binary = Integer.toBinaryString(symbols.getAddress(symbol));
-						}else {
+						if(!symbols.contains(symbol)) {
 							//シンボルテーブルに追加
 							symbols.addEntry(symbol, symbols.getCurrentValMemory());
 							symbols.setCurrentValMemory(symbols.getCurrentValMemory()+1);
-							//2進数に変換
-							binary = Integer.toBinaryString(symbols.getAddress(symbol));
 						}
+						//2進数に変換
+						binary = Integer.toBinaryString(symbols.getAddress(symbol));
 					}
 					//16桁で出力
 					String zr="";
@@ -110,7 +108,6 @@ public class Main {
 			pw.close();
 		}catch(IOException e) {
 			e.printStackTrace();
-		}
-		
+		}		
 	}
 }

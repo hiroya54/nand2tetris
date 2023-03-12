@@ -22,7 +22,7 @@ public class Parse{
 		BufferedReader br = new BufferedReader(fr);
 		
 		//命令文のみ取り出してArrayListに格納
-		String command;
+		String command="";
 		while((command=br.readLine())!=null) {
 			
 			//コメント行と空白行を削除
@@ -55,7 +55,7 @@ public class Parse{
 		String command = instructions.get(currentCommandNum);
 		
 		if(command.charAt(0)=='@') return "A_COMMAND";
-		else if(command.charAt(0)=='(') return "L_COMMAND";
+		else if(command.charAt(0)=='(' && command.charAt(command.length()-1)==')') return "L_COMMAND";
 		else return "C_COMMAND";
 	}
 	
@@ -120,11 +120,9 @@ public class Parse{
 		}
 	
 	}
-	
 	public void reset() {
 		currentCommandNum=0;
 	}
-	
 	public int getCurrentCommandNum() {
 		return currentCommandNum;
 	}
