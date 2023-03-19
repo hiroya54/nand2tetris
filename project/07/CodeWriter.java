@@ -5,14 +5,13 @@ import java.io.PrintWriter;
 
 public class CodeWriter {
 	
-	private String fileName="";
+	private String fileName;
 	private PrintWriter pw;
 	private int currentLine;
 	
 	CodeWriter(String outFile) throws IOException{
-		
-		this.setFileName(outFile);
-		pw = new PrintWriter(fileName);
+		pw = new PrintWriter(outFile);
+		this.setFileName(outFile.substring(outFile.lastIndexOf("/")+1, outFile.lastIndexOf(".")));
 		currentLine=0;
 	}
 	public void myWrite(String command) {
@@ -124,6 +123,20 @@ public class CodeWriter {
 				myWrite("M=D");
 				myWrite("@SP");
 				myWrite("M=M+1");
+			}else if(p.arg1().equals("static")) {
+				myWrite("@16");
+				if(p.arg2()!=0) {
+					myWrite("D=A");
+					myWrite("@"+p.arg2());
+					myWrite("A=D+A");
+				}
+				myWrite("D=M");
+				myWrite("@SP");
+				myWrite("A=M");
+				myWrite("M=D");
+				myWrite("@SP");
+				myWrite("AM=M+1");
+				
 			}
 		}else if(p.commandType().equals("C_POP")) {
 			if(p.arg1().matches("local|argument|this|that")) {
@@ -159,6 +172,12 @@ public class CodeWriter {
 				}else if(p.arg1().equals("temp")) {
 					myWrite("@"+(p.arg2()+5));
 				}
+				myWrite("M=D");
+			}else if(p.arg1().equals("static")) {
+				myWrite("@SP");
+				myWrite("AM=M-1");
+				myWrite("D=M");
+				myWrite("@"+(16+p.arg2()));
 				myWrite("M=D");
 			}
 		}
