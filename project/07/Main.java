@@ -27,6 +27,7 @@ public class Main {
 			CodeWriter cw = new CodeWriter(outFile);
 			
 			while(p.hasMoreCommands()) {
+				System.out.println(p.getCurrentCommand());
 				if(p.commandType().equals("C_ARITHMETIC")) {
 					cw.writeArithmetc(p);	
 				}else if(p.commandType().equals("C_PUSH")) {

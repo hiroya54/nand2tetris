@@ -51,7 +51,7 @@ public class Parser {
 	}
 	
 	public String commandType() {
-		if(currentCommand.startsWith("add")){
+		if(currentCommand.matches("add|sub|neg|eq|gt|lt|and|or|not")){
 			return "C_ARITHMETIC";
 		}else if(currentCommand.startsWith("push")) {
 			return "C_PUSH";
