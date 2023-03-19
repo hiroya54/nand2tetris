@@ -65,7 +65,7 @@ public class Parser {
 	public String arg1() {
 		if(this.commandType()=="C_ARITHMETIC") {
 			return currentCommand;
-		}else if(this.commandType()=="C_PUSH") {
+		}else if(this.commandType().matches("C_PUSH|C_POP")) {
 			return currentCommand.split(" ")[1];
 		}else {
 			return "NG";
@@ -73,8 +73,8 @@ public class Parser {
 		
 	}
 	
-	public int  arg2() {
-		if(this.commandType()=="C_PUSH") {
+	public int arg2() {
+		if(this.commandType().matches("C_PUSH|C_POP")) {
 			return Integer.parseInt(currentCommand.split(" ")[2]);
 		}else {
 			return -1;

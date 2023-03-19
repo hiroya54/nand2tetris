@@ -68,16 +68,12 @@ public class CodeWriter {
 			myWrite("D=M");
 			myWrite("A=A-1");
 			if(p.getCurrentCommand().equals("add")) {
-				pw.println("//add");
 				myWrite("D=M+D");
 			}else if(p.getCurrentCommand().equals("sub")) {
-				pw.println("//sub");
 				myWrite("D=M-D");
 			}else if(p.getCurrentCommand().equals("and")) {
-				pw.println("//and");
 				myWrite("D=M&D");
 			}else if(p.getCurrentCommand().equals("or")) {
-				pw.println("//or");
 				myWrite("D=M|D");
 			}
 			myWrite("M=D");
@@ -87,7 +83,6 @@ public class CodeWriter {
 	public void writePushPop(Parser p) {
 		if(p.commandType().equals("C_PUSH")) {
 			if(p.arg1().equals("constant")) {
-				//System.out.println("push");
 				myWrite("@"+p.arg2());
 				myWrite("D=A");
 				myWrite("@SP");
@@ -95,16 +90,81 @@ public class CodeWriter {
 				myWrite("M=D");
 				myWrite("@SP");
 				myWrite("M=M+1");
+			}else if(p.arg1().matches("local|argument|this|that")) {
+				if(p.arg1().equals("local")) {
+					myWrite("@LCL");
+				}else if(p.arg1().equals("argument")) {
+					myWrite("@ARG");
+				}else if(p.arg1().equals("this")) {
+					myWrite("@THIS");
+				}else if(p.arg1().equals("that")) {
+					myWrite("@THAT");
+				}
+				myWrite("D=M");
+				if(p.arg2()!=0) {
+					myWrite("@"+p.arg2());
+					myWrite("D=A+D");
+				}
+				myWrite("A=D");
+				myWrite("D=M");
+				myWrite("@SP");
+				myWrite("A=M");
+				myWrite("M=D");
+				myWrite("@SP");
+				myWrite("M=M+1");
+			}else if(p.arg1().matches("pointer|temp")) {
+				if(p.arg1().equals("pointer")) {
+					myWrite("@"+(p.arg2()+3));
+				}else if(p.arg1().equals("temp")) {
+					myWrite("@"+(p.arg2()+5));
+				}
+				myWrite("D=M");
+				myWrite("@SP");
+				myWrite("A=M");
+				myWrite("M=D");
+				myWrite("@SP");
+				myWrite("M=M+1");
+			}
+		}else if(p.commandType().equals("C_POP")) {
+			if(p.arg1().matches("local|argument|this|that")) {
+				if(p.arg1().equals("local")) {
+					myWrite("@LCL");
+				}else if(p.arg1().equals("argument")) {
+					myWrite("@ARG");
+				}else if(p.arg1().equals("this")) {
+					myWrite("@THIS");
+				}else if(p.arg1().equals("that")) {
+					myWrite("@THAT");
+				}
+				myWrite("D=M");
+				if(p.arg2()!=0) {
+					myWrite("@"+p.arg2());
+					myWrite("D=A+D");
+				}
+				myWrite("@R15");
+				myWrite("M=D");
+				myWrite("@SP");
+				myWrite("AM=M-1");
+				myWrite("D=M");
+				myWrite("@R15");
+				myWrite("A=M");
+				myWrite("M=D");
+
+			}else if(p.arg1().matches("pointer|temp")) {
+				myWrite("@SP");
+				myWrite("AM=M-1");
+				myWrite("D=M");
+				if(p.arg1().equals("pointer")) {
+					myWrite("@"+(p.arg2()+3));
+				}else if(p.arg1().equals("temp")) {
+					myWrite("@"+(p.arg2()+5));
+				}
+				myWrite("M=D");
 			}
 		}
 		
 	}
 	public void close() {
-		/*
-		myWrite("(END)");
-		myWrite("@END");
-		myWrite("0;JMP");
-		*/
 		pw.close();
 	}
 

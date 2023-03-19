@@ -30,7 +30,7 @@ public class Main {
 				System.out.println(p.getCurrentCommand());
 				if(p.commandType().equals("C_ARITHMETIC")) {
 					cw.writeArithmetc(p);	
-				}else if(p.commandType().equals("C_PUSH")) {
+				}else if(p.commandType().matches("C_PUSH|C_POP")) {
 					cw.writePushPop(p);
 				}
 				p.advance();
