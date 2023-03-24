@@ -57,6 +57,18 @@ public class Parser {
 			return "C_PUSH";
 		}else if(currentCommand.startsWith("pop")) {
 			return "C_POP";
+		}else if(currentCommand.startsWith("label")) {
+			return "C_LABEL";
+		}else if(currentCommand.startsWith("goto")) {
+			return "C_GOTO";
+		}else if(currentCommand.startsWith("if-goto")) {
+			return "C_IF";
+		}else if(currentCommand.startsWith("function")) {
+			return "C_FUNCTION";
+		}else if(currentCommand.startsWith("return")) {
+			return "C_RETURN";
+		}else if(currentCommand.startsWith("call")) {
+			return "C_CALL";
 		}else {
 			return "NG";
 		}
@@ -65,7 +77,7 @@ public class Parser {
 	public String arg1() {
 		if(this.commandType()=="C_ARITHMETIC") {
 			return currentCommand;
-		}else if(this.commandType().matches("C_PUSH|C_POP")) {
+		}else if(this.commandType().matches("C_PUSH|C_POP|C_LABEL|C_GOTO|C_IF|C_FUNCTION|C_CALL")) {
 			return currentCommand.split(" ")[1];
 		}else {
 			return "NG";
@@ -74,7 +86,7 @@ public class Parser {
 	}
 	
 	public int arg2() {
-		if(this.commandType().matches("C_PUSH|C_POP")) {
+		if(this.commandType().matches("C_PUSH|C_POP|C_FUNCTION|C_CALL")) {
 			return Integer.parseInt(currentCommand.split(" ")[2]);
 		}else {
 			return -1;

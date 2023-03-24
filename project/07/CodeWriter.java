@@ -22,6 +22,42 @@ public class CodeWriter {
 	public void setFileName(String fileName) {
 		this.fileName=fileName;
 	}
+	public void writeInit() {
+		myWrite("@256");
+		myWrite("D=A");
+		myWrite("@SP");
+		myWrite("M=D");
+		writeCall("Sys.init",0);	
+	}
+	
+	public void writeLabel(String label) {
+		myWrite("("+label+")");
+	}
+	
+	public void writeGoTo(String label) {
+		myWrite("@"+label);
+		myWrite("0;JMP");
+	}
+	
+	public void writeIf(String label) {
+		myWrite("@SP");
+		myWrite("AM=M-1");
+		myWrite("D=M");
+		myWrite("@"+label);
+		myWrite("D;JNE");
+	}
+	
+	public void writeCall(String functionName,int nimArgs) {
+		
+	}
+	
+	public void writeReturn() {
+		
+	}
+	
+	public void writeFunction(String functionsName,int numLocals) {
+		
+	}
 	
 	public void writeArithmetc(Parser p) {
 		if(p.getCurrentCommand().equals("neg")) {
