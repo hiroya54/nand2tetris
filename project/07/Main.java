@@ -45,6 +45,10 @@ public class Main {
 					cw.writeIf(p.arg1());
 				}else if(p.commandType().equals("C_GOTO")) {
 					cw.writeGoTo(p.arg1());
+				}else if(p.commandType().equals("C_FUNCTION")) {
+					cw.writeFunction(p.arg1(), p.arg2());
+				}else if(p.commandType().equals("C_RETURN")) {
+					cw.writeReturn();
 				}
 				p.advance();
 			}
