@@ -43,6 +43,8 @@ public class Main {
 					cw.writeLabel(p.arg1());
 				}else if(p.commandType().equals("C_IF")) {
 					cw.writeIf(p.arg1());
+				}else if(p.commandType().equals("C_GOTO")) {
+					cw.writeGoTo(p.arg1());
 				}
 				p.advance();
 			}
