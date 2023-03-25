@@ -8,11 +8,13 @@ public class CodeWriter {
 	private String fileName;
 	private PrintWriter pw;
 	private int currentLine;
+	private int labelNum;
 	
 	CodeWriter(String outFile) throws IOException{
 		pw = new PrintWriter(outFile);
 		this.setFileName(outFile.substring(outFile.lastIndexOf("/")+1, outFile.lastIndexOf(".")));
 		currentLine=0;
+		labelNum=0;
 	}
 	public void myWrite(String command) {
 		pw.println(command);
@@ -47,16 +49,117 @@ public class CodeWriter {
 		myWrite("D;JNE");
 	}
 	
-	public void writeCall(String functionName,int nimArgs) {
+	public void writeCall(String functionName,int numArgs) {
+		myWrite("@return-address" + labelNum);
+		myWrite("D=A");
+		pushExitCommand();
 		
+		myWrite("@LCL");
+		myWrite("D=M");
+		pushExitCommand();
+		
+		myWrite("@ARG");
+		myWrite("D=M");
+		pushExitCommand();
+		
+		myWrite("@THIS");
+		myWrite("D=M");
+		pushExitCommand();
+		
+		myWrite("@THAT");
+		myWrite("D=M");
+		pushExitCommand();
+		
+		myWrite("@SP");
+		myWrite("D=M");
+		myWrite("@5");
+		myWrite("D=D-A");
+		myWrite("@"+numArgs);
+		myWrite("D=D-A");
+		myWrite("@ARG");
+		myWrite("M=D");
+		
+		myWrite("@SP");
+		myWrite("D=M");
+		myWrite("@LCL");
+		myWrite("M=D");
+		
+		writeGoTo(functionName);
+		
+		writeLabel("return-address"+labelNum);
+		
+		labelNum++;
 	}
 	
 	public void writeReturn() {
+		myWrite("@LCL");
+		myWrite("D=M");
+		myWrite("@FRAME");
+		myWrite("M=D");
 		
+		myWrite("@5");
+		myWrite("A=D-A");
+		myWrite("D=M");
+		myWrite("@RET");
+		myWrite("M=D");
+		
+		myWrite("@SP");
+		myWrite("AM=M-1");
+		myWrite("D=M");
+		myWrite("@ARG");
+		myWrite("A=M");
+		myWrite("M=D");
+		
+		myWrite("@ARG");
+		myWrite("D=M+1");
+		myWrite("@SP");
+		myWrite("M=D");
+		
+		myWrite("@FRAME");
+		myWrite("A=M-1");
+		myWrite("D=M");
+		myWrite("@THAT");
+		myWrite("M=D");
+		
+		myWrite("@FRAME");
+		myWrite("D=M");
+		myWrite("@2");
+		myWrite("A=D-A");
+		myWrite("D=M");
+		myWrite("@THIS");
+		myWrite("M=D");
+		
+		myWrite("@FRAME");
+		myWrite("D=M");
+		myWrite("@3");
+		myWrite("A=D-A");
+		myWrite("D=M");
+		myWrite("@ARG");
+		myWrite("M=D");
+		
+		myWrite("@FRAME");
+		myWrite("D=M");
+		myWrite("@4");
+		myWrite("A=D-A");
+		myWrite("D=M");
+		myWrite("@LCL");
+		myWrite("M=D");
+		
+		myWrite("@RET");
+		myWrite("A=M");
+		myWrite("0;JMP");
 	}
 	
 	public void writeFunction(String functionsName,int numLocals) {
-		
+		writeLabel(functionsName);
+		for(int i=0;i<numLocals;i++) {
+			myWrite("D=0");
+			myWrite("@SP");
+			myWrite("A=M");
+			myWrite("M=D");
+			myWrite("@SP");
+			myWrite("M=M+1");
+		}
 	}
 	
 	public void writeArithmetc(Parser p) {
@@ -218,6 +321,13 @@ public class CodeWriter {
 			}
 		}
 		
+	}
+	public void pushExitCommand() {
+		myWrite("@SP");
+		myWrite("A=M");
+		myWrite("M=D");
+		myWrite("@SP");
+		myWrite("M=M+1");
 	}
 	public void close() {
 		pw.close();

@@ -20,17 +20,29 @@ public class Main {
 	
 			//ファイル整形
 			Parser p = new Parser(input);
-		
+			
+			/*
+			for(String command:p.getCommands()) {
+				System.out.println(command);
+			}
+			*/
 			//出力ファイル準備
 			System.out.print("出力ファイル名:");
 			String outFile = sc.next();
 			CodeWriter cw = new CodeWriter(outFile);
 			
+			
+			//cw.writeInit();
 			while(p.hasMoreCommands()) {
+				System.out.println(p.getCurrentCommand());
 				if(p.commandType().equals("C_ARITHMETIC")) {
 					cw.writeArithmetc(p);	
 				}else if(p.commandType().matches("C_PUSH|C_POP")) {
 					cw.writePushPop(p);
+				}else if(p.commandType().equals("C_LABEL")) {
+					cw.writeLabel(p.arg1());
+				}else if(p.commandType().equals("C_IF")) {
+					cw.writeIf(p.arg1());
 				}
 				p.advance();
 			}

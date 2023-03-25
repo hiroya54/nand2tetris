@@ -29,11 +29,11 @@ public class Parser {
 			else if(command.substring(0, 2).equals("//")) continue;
 			
 			//コマンドのコメントアウトと前後の空白を削除
-			command = command.trim();
 			int comment = command.indexOf("//");
 			if(comment!=-1) {
-				command = command.substring(comment,command.length());
+				command = command.substring(0,comment);
 			}
+			command = command.trim();
 			commands.add(command);
 		}
 		br.close();
